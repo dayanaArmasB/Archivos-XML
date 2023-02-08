@@ -155,6 +155,7 @@
             this.btn_excel.TabIndex = 11;
             this.btn_excel.Text = "EXCEL";
             this.btn_excel.UseVisualStyleBackColor = true;
+            this.btn_excel.Click += new System.EventHandler(this.btn_excel_Click);
             // 
             // Form1
             // 

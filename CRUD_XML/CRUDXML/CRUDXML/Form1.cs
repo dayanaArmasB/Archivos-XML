@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Excel = Microsoft.Office.Interop.Excel;
 
 
 namespace CRUDXML
@@ -112,8 +113,26 @@ namespace CRUDXML
             }
         }
 
+        private void btn_excel_Click(object sender, EventArgs e)
+        {
+            var excelApp = new Excel.Application();
 
+            excelApp.Visible = true;
+            excelApp.Workbooks.Add();
 
+            Excel._Worksheet Hoja = (Excel.Worksheet)excelApp.ActiveSheet;
 
+            //exportar lo datos de un datagridview a excel
+
+            foreach (DataGridViewColumn columna in dataGridView1.Columns)
+            {
+                Hoja.Cells[1, columna.Index + 1] = columna.HeaderText;
+                foreach (DataGridViewRow fila in dataGridView1.Rows)
+                {
+                    Hoja.Cells[fila.Index + 2, columna.Index + 1] = fila.Cells[columna.Index].Value;
+                }
+            }
+
+        }
     }
 }
