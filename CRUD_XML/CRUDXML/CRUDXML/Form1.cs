@@ -30,7 +30,8 @@ namespace CRUDXML
                 id = p.Element("id").Value,
                 nombre = p.Element("nombre").Value,
                 precio = p.Element("precio").Value,
-                cantidad = p.Element("cantidad").Value
+                cantidad = p.Element("cantidad").Value,
+                total = p.Element("total").Value
             }).OrderBy(p => p.id).ToList();
 
             
@@ -38,19 +39,21 @@ namespace CRUDXML
             txt_nombre.DataBindings.Clear();
             txt_precio.DataBindings.Clear();
             txt_cant_vend.DataBindings.Clear();
+            txt_total.DataBindings.Clear();
             txt_id.DataBindings.Add("text", data, "id");
             txt_nombre.DataBindings.Add("text", data, "nombre");
             txt_precio.DataBindings.Add("text", data, "precio");
             txt_cant_vend.DataBindings.Add("text", data, "cantidad");
+            txt_total.DataBindings.Add("text", data, "total");
             dataGridView1.DataSource = data;
         }
 
-        public void Total()
+        public double Total(double precio, int cantidad)
         {
             double total;
-            int cantidad = int.Parse(txt_cant_vend.Text);
-            double precio = double.Parse(txt_precio.Text);
             total = precio * cantidad;
+
+            return total;
         }
 
         public void metodo()
@@ -72,6 +75,8 @@ namespace CRUDXML
             txt_id.Clear();
             txt_nombre.Clear();
             txt_precio.Clear();
+            txt_total.Clear();
+            txt_total.Enabled = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -80,7 +85,8 @@ namespace CRUDXML
             new XElement("id", txt_id.Text),
             new XElement("nombre", txt_nombre.Text),
             new XElement("precio", txt_precio.Text),
-            new XElement("cantidad", txt_cant_vend.Text));
+            new XElement("cantidad", txt_cant_vend.Text),
+            new XElement("total", txt_total.Text));
             xmldoc.Root.Add(emp);
             xmldoc.Save(FILE);
             cargarDatos();
@@ -95,6 +101,7 @@ namespace CRUDXML
                 emp.Element("nombre").Value = txt_nombre.Text;
                 emp.Element("precio").Value = txt_precio.Text;
                 emp.Element("cantidad").Value = txt_cant_vend.Text;
+                emp.Element("total").Value = txt_total.Text;
                 xmldoc.Save(FILE);
                 cargarDatos();
                 metodo();
@@ -132,7 +139,14 @@ namespace CRUDXML
                     Hoja.Cells[fila.Index + 2, columna.Index + 1] = fila.Cells[columna.Index].Value;
                 }
             }
+        }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int cantidad = int.Parse(txt_cant_vend.Text);
+            double precio = double.Parse(txt_precio.Text);
+
+            txt_total.Text = Total(precio,cantidad).ToString();
         }
     }
 }
